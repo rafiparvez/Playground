@@ -1,8 +1,11 @@
-name: airflowprojenv
+name: airflowenv
 channels:
   - conda-forge
   - defaults
 dependencies:
-  - airflow=1.10.0
-prefix: /Users/parvez.rafi/miniconda2/envs/airflowprojenv
+  - pip=18.1
+  - python=3.6
+  - pip:
+    - apache-airflow
+prefix: /Users/parvez.rafi/miniconda2/envs/airflowenv
 
