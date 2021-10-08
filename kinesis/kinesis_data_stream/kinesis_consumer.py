@@ -13,7 +13,7 @@ my_shard_id = response['StreamDescription']['Shards'][0]['ShardId']
 
 shard_iterator = kinesis_client.get_shard_iterator(StreamName=my_stream_name,
                                                       ShardId=my_shard_id,
-                                                      ShardIteratorType='LATEST')
+                                                      ShardIteratorType='TRIM_HORIZON')
 
 my_shard_iterator = shard_iterator['ShardIterator']
 
@@ -21,11 +21,10 @@ record_response = kinesis_client.get_records(ShardIterator=my_shard_iterator,
                                               Limit=2)
 
 while 'NextShardIterator' in record_response:
-    record_response = kinesis_client.get_records(ShardIterator=record_response['NextShardIterator'],
-                                                  Limit=2)
-
+    record_response = kinesis_client.get_records(ShardIterator=record_response['NextShardIterator'])
+    records = record_response.get('Records')
     print(record_response)
 
     # wait for 2 second
     print("wait...")
-    time.sleep(2)
+    time.sleep(1)

@@ -17,24 +17,32 @@ def put_to_stream(payload):
     print(payload)
 
     put_response = kinesis_client.put_record(
-		StreamName=my_stream_name,Data=json.dumps(payload),PartitionKey=event_id)
+		StreamName=my_stream_name,
+		Data=json.dumps(payload),PartitionKey=event_id)
     print(put_response)
 
-while True:
+event_types = ['completed-lesson', 'other']
+
+count = 0
+
+while count < 20:
+    count += 1
+    print(f"sending event# {count}")
     event_id = str(random.randint(1, 1000))
     event_timestamp = calendar.timegm(datetime.utcnow().timetuple())
-
+    # event_type = event_types[random.randint(0, 1)]
+    event_type = 'completed-lesson'
     payload = {
         'lesson_id': fake.numerify(text='########'),
         'lesson_rank': random.randint(1, 3),
         'class_id': fake.numerify(text='######'),
-        'class_sku': fake.numerify(text='######'),
-        'event_type': 'completed-lession',
+        'user_id': fake.numerify(text='#########'),
+        'event_type': event_type,
         'timestamp': str(event_timestamp),
         'event_id': event_id
     }
 
     put_to_stream(payload)
 
-    print("wait for 2 secs...")
-    time.sleep(2)
+    print("wait for 1 secs...")
+    time.sleep(1)
